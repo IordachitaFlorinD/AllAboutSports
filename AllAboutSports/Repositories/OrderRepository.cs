@@ -5,24 +5,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AllAboutSports.Services
+namespace AllAboutSports.Repositories
 {
-    public interface IOrderDataAccess
+    public interface IOrderRepository
     {
-        Task<Order> GetCategory(int id);
-        Task<int> AddCategory(Order order);
+        Task<Order> GetOrderById(int id);
+        Task<int> AddOrder(Order order);
     }
 
-    public class OrderDataAccess : IOrderDataAccess
+    public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public OrderDataAccess(ApplicationDbContext dbContext)
+        public OrderRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<int> AddCategory(Order order)
+        public async Task<int> AddOrder(Order order)
         {
             order.CreatedAt = DateTime.UtcNow;
             _dbContext.Orders.Add(order);
@@ -30,7 +30,7 @@ namespace AllAboutSports.Services
             return await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Order> GetCategory(int id)
+        public async Task<Order> GetOrderById(int id)
         {
             Order order = await _dbContext.Orders.FindAsync(id);
 

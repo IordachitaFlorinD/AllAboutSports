@@ -1,5 +1,5 @@
 ﻿using AllAboutSports.Models;
-using AllAboutSports.Services;
+using AllAboutSports.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,25 +12,25 @@ namespace AllAboutSports.Controllers
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderDataAccess _categoryDataAccess;
+        private readonly IOrderRepository _orderRepository;
 
-        public OrderController(IOrderDataAccess categoryDataAccess)
+        public OrderController(IOrderRepository orderRepository)
         {
-            _categoryDataAccess = categoryDataAccess;
+            _orderRepository = orderRepository;
         }
 
         [HttpGet]
         [Route("get/{id}")]
-        public Task<Order> GetCategory([FromRoute] int id)
+        public Task<Order> GetOrderById([FromRoute] int id)
         {
-            return _categoryDataAccess.GetCategory(id);
+            return _orderRepository.GetOrderById(id);
         }
 
         [HttpPost]
         [Route("add")]
-        public StatusCodeResult AddTextPost([FromBody] Order order)
+        public StatusCodeResult AddOrder([FromBody] Order order)
         {
-            var response = _categoryDataAccess.AddCategory(order);
+            var response = _orderRepository.AddOrder(order);
             if (response.Result > 0)
                 return Ok();
 

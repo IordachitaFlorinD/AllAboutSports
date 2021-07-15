@@ -5,21 +5,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AllAboutSports.Services
+namespace AllAboutSports.Repositories
 {
-    public interface ICategoryDataAccess
+    public interface ICategoryRepository
     {
-        Task<Category> GetCategory(int id);
+        Task<Category> GetCategoryById(int id);
         Task<int> AddCategory(Category category);
     }
 
-    public class CategoryDataAccess : ICategoryDataAccess
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public CategoryDataAccess(ApplicationDbContext dbContext)
+        public CategoryRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+        public async Task<Category> GetCategoryById(int id)
+        {
+            Category category = await _dbContext.Categories.FindAsync(id);
+
+            if (category == null || category.DeletedAt != null)
+                return null;
+
+            return category;
         }
 
         public async Task<int> AddCategory(Category category)
@@ -28,16 +37,6 @@ namespace AllAboutSports.Services
             _dbContext.Categories.Add(category);
 
             return await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<Category> GetCategory(int id)
-        {
-            Category category = await _dbContext.Categories.FindAsync(id);
-
-            if (category == null || category.DeletedAt != null)
-                return null;
-
-            return category;
         }
     }
 }

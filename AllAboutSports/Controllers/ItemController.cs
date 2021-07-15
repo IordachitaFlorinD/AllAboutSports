@@ -1,5 +1,5 @@
 ﻿using AllAboutSports.Models;
-using AllAboutSports.Services;
+using AllAboutSports.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,25 +12,25 @@ namespace AllAboutSports.Controllers
     [Route("api/[controller]")]
     public class ItemController : ControllerBase
     {
-        private readonly IItemDataAccess _categoryDataAccess;
+        private readonly IItemRepository _itemRepository;
 
-        public ItemController(IItemDataAccess categoryDataAccess)
+        public ItemController(IItemRepository itemRepository)
         {
-            _categoryDataAccess = categoryDataAccess;
+            _itemRepository = itemRepository;
         }
 
         [HttpGet]
         [Route("get/{id}")]
-        public Task<Item> GetCategory([FromRoute] int id)
+        public Task<Item> GetItemById([FromRoute] int id)
         {
-            return _categoryDataAccess.GetCategory(id);
+            return _itemRepository.GetItemById(id);
         }
 
         [HttpPost]
         [Route("add")]
-        public StatusCodeResult AddTextPost([FromBody] Item item)
+        public StatusCodeResult AddItem([FromBody] Item item)
         {
-            var response = _categoryDataAccess.AddCategory(item);
+            var response = _itemRepository.AddItem(item);
             if (response.Result > 0)
                 return Ok();
 

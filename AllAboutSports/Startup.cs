@@ -1,6 +1,6 @@
 using AllAboutSports.Data;
 using AllAboutSports.Models;
-using AllAboutSports.Services;
+using AllAboutSports.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,7 +56,8 @@ namespace AllAboutSports
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AllAboutSports", Version = "v1" });
             });
 
-            services.AddTransient<IDeliveryProviderAccess, DeliveryProviderDataAccess>();
+            services.AddTransient<IDeliveryProviderRepository, DeliveryProviderRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

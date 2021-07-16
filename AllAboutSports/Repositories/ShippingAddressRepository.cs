@@ -11,6 +11,8 @@ namespace AllAboutSports.Repositories
     {
         Task<ShippingAddress> GetShippingAddressById(int id);
         Task<int> AddShippingAddress(ShippingAddress shippingAddress);
+        Task<int> UpdateShippingAddress(ShippingAddress updateshippingAddress);
+        Task<int> DeleteShippingAddress(int id);
     }
 
     public class ShippingAddressRepository : IShippingAddressRepository
@@ -35,6 +37,33 @@ namespace AllAboutSports.Repositories
         {
             shippingAddress.CreatedAt = DateTime.UtcNow;
             _dbContext.ShippingAddresses.Add(shippingAddress);
+
+            return await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> UpdateShippingAddress(ShippingAddress updateshippingAddress)
+        {
+            var shippingAddress = await _dbContext.ShippingAddresses.FindAsync(updateshippingAddress.Id);
+
+            if (shippingAddress == null || shippingAddress.DeletedAt != null)
+                return 0;
+
+            updateshippingAddress.UpdatedAt = DateTime.UtcNow;
+            _dbContext.Entry(updateshippingAddress).CurrentValues.SetValues(updateshippingAddress);
+
+            return await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> DeleteShippingAddress(int id)
+        {
+            var shippingAddress = await _dbContext.ShippingAddresses.FindAsync(id)
+;
+            if (shippingAddress == null || shippingAddress.DeletedAt != null)
+                return 0;
+
+
+            shippingAddress.DeletedAt = DateTime.UtcNow;
+            _dbContext.ShippingAddresses.Update(shippingAddress);
 
             return await _dbContext.SaveChangesAsync();
         }

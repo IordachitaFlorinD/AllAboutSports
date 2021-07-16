@@ -40,6 +40,8 @@ namespace AllAboutSports
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();

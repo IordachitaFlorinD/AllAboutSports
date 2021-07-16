@@ -28,10 +28,33 @@ namespace AllAboutSports.Controllers
 
         [HttpPost]
         [Route("add")]
-        public StatusCodeResult AddTextPost([FromBody] Category category)
+        public StatusCodeResult AddCategory([FromBody] Category category)
         {
             var response = _categoryRepository.AddCategory(category);
             if (response.Result > 0)
+                return Ok();
+
+            return BadRequest();
+        }
+
+        [HttpPut]
+        [Route("update")]
+        public StatusCodeResult UpdateCategory([FromBody] Category updatedCategory)
+        {
+            var respone = _categoryRepository.UpdateCategory(updatedCategory);
+            if (respone.Result > 0)
+                return Ok();
+
+            return BadRequest();
+        }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public StatusCodeResult DeleteCategory([FromRoute] int id)
+        {
+            var respone = _categoryRepository.DeleteCategory(id)
+;
+            if (respone.Result > 0)
                 return Ok();
 
             return BadRequest();

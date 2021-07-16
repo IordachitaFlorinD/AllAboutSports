@@ -36,5 +36,28 @@ namespace AllAboutSports.Controllers
 
             return BadRequest();
         }
+
+        [HttpPut]
+        [Route("update")]
+        public StatusCodeResult UpdateShippingAddress([FromBody] ShippingAddress updateshippingAddress)
+        {
+            var respone = _shippingAddressRepository.UpdateShippingAddress(updateshippingAddress);
+            if (respone.Result > 0)
+                return Ok();
+
+            return BadRequest();
+        }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public StatusCodeResult DeleteShippingAddress([FromRoute] int id)
+        {
+            var respone = _shippingAddressRepository.DeleteShippingAddress(id)
+;
+            if (respone.Result > 0)
+                return Ok();
+
+            return BadRequest();
+        }
     }
 }

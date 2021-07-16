@@ -36,5 +36,28 @@ namespace AllAboutSports.Controllers
 
             return BadRequest();
         }
+
+        [HttpPut]
+        [Route("update")]
+        public StatusCodeResult UpdateItem([FromBody] Item updateditem)
+        {
+            var respone = _itemRepository.UpdateItem(updateditem);
+            if (respone.Result > 0)
+                return Ok();
+
+            return BadRequest();
+        }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public StatusCodeResult DeleteItem([FromRoute] int id)
+        {
+            var respone = _itemRepository.DeleteItem(id)
+;
+            if (respone.Result > 0)
+                return Ok();
+
+            return BadRequest();
+        }
     }
 }

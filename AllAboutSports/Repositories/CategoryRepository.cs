@@ -11,6 +11,9 @@ namespace AllAboutSports.Repositories
     {
         Task<Category> GetCategoryById(int id);
         Task<int> AddCategory(Category category);
+        Task<int> UpdateCategory(Category updatedcategory);
+        Task<int> DeleteCategory(int id);
+
     }
 
     public class CategoryRepository : ICategoryRepository
@@ -35,6 +38,32 @@ namespace AllAboutSports.Repositories
         {
             category.CreatedAt = DateTime.UtcNow;
             _dbContext.Categories.Add(category);
+
+            return await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> UpdateCategory(Category updatedcategory)
+        {
+            var category = await _dbContext.Categories.FindAsync(updatedcategory.Id);
+
+            if (category == null || category.DeletedAt != null)
+                return 0;
+
+            updatedcategory.UpdatedAt = DateTime.UtcNow;
+            _dbContext.Entry(category).CurrentValues.SetValues(updatedcategory);
+
+            return await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> DeleteCategory(int id)
+        {
+            var category = await _dbContext.Categories.FindAsync(id)
+;
+            if (category == null || category.DeletedAt != null)
+                return 0;
+
+            category.DeletedAt = DateTime.UtcNow;
+            _dbContext.Categories.Update(category);
 
             return await _dbContext.SaveChangesAsync();
         }
